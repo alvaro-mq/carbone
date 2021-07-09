@@ -335,6 +335,23 @@ describe('parser', function () {
     });
   });
 
+  describe('findImages', function () {
+    it('should extract the images from the xml, return a list with the name of the image and the marker', function (done) {
+      parser.findImages('<draw:frame draw:style-name="fr2" draw:name="Image1" text:anchor-type="char" svg:width="2.552cm" svg:height="2.552cm" draw:z-index="0"><draw:image xlink:href="Pictures/100000000000038400000384FE829C9F828D91F2.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" loext:mime-type="image/jpeg"/><svg:title>{d.imageQR}</svg:title></draw:frame>', function (err, images) {
+        helper.assert(err, null);
+        helper.assert(images, [ { name: 'imageQR', picture: 'Pictures/100000000000038400000384FE829C9F828D91F2.jpg'}]);
+        done();
+      });
+    });
+    it('should extract the images from the xml, return an empty list if it doesn`t find any images', function (done) {
+      parser.findImages('{d.imageQR}', function (err, images) {
+        helper.assert(err, null);
+        helper.assert(images, []);
+        done();
+      });
+    });
+  });
+
   describe('removeXMLInsideMarkers', function () {
 
     it('should do not change the marker', function () {
